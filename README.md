@@ -36,7 +36,8 @@ Suggested first test:
 3. Enter only facts you verified
 4. Paste marketplace-suggested keywords
 5. Run AI
-6. Inspect Product Understanding, Keyword Priority, Query Simulation, Claim Guard and final listing
-7. Copy the output and compare it with your current listing.
+V10.1 deployment test
+7. Inspect Product Understanding, Keyword Priority, Query Simulation, Claim Guard and final listing
+8. Copy the output and compare it with your current listing.
 
 Do not publish automatically from this tool.
