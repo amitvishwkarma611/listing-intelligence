@@ -1,0 +1,13 @@
+{
+  "name": "listing-intelligence-v5",
+  "private": true,
+  "version": "0.5.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@google/genai": "latest"
+  }
+}

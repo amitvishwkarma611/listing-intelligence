@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827"><title>Listing Intelligence V4</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--t:#101828;--m:#667085;--l:#e4e7ec;--p:#111827;--g:#067647;--w:#b54708;--r:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.app{max-width:700px;margin:auto;padding:14px 14px 105px}
+header{display:flex;justify-content:space-between;align-items:center;padding:7px 3px 14px}.brand{font-weight:900;font-size:21px}.sub{font-size:11px;color:var(--m);margin-top:2px}.badge{font-size:10px;font-weight:900;background:#eef2ff;padding:6px 8px;border-radius:99px}
+.steps{display:flex;gap:5px;margin-bottom:12px}.steps i{height:4px;flex:1;background:#d0d5dd;border-radius:5px}.steps i.on{background:#111827}
+.card{background:#fff;border:1px solid var(--l);border-radius:18px;padding:15px;margin-bottom:11px;box-shadow:0 2px 9px #10182808}h2{font-size:16px;margin:0 0 4px}h3{font-size:14px;margin:0}.hint{font-size:11.5px;color:var(--m);line-height:1.5;margin:0 0 11px}
+label{display:block;font-size:11.5px;font-weight:800;margin:11px 0 6px}input,textarea,select{width:100%;padding:11px 12px;border:1px solid #d0d5dd;border-radius:12px;background:#fff;font:inherit;font-size:13px;outline:0}textarea{min-height:100px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.upload{border:1.5px dashed #98a2b3;border-radius:15px;padding:16px;text-align:center;background:#fafafa}.upload input{display:none}.upload label{display:inline-block;background:#111827;color:#fff;padding:10px 13px;border-radius:11px;margin:0}.preview{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:9px}.preview img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px}
+.actions{position:fixed;bottom:0;left:0;right:0;z-index:10;padding:9px 14px calc(9px + env(safe-area-inset-bottom));background:#ffffffee;backdrop-filter:blur(12px);border-top:1px solid var(--l)}button{border:0;border-radius:12px;padding:12px 14px;font:inherit;font-weight:850;cursor:pointer}.primary{background:#111827;color:#fff}.secondary{background:#f2f4f7;color:#101828}.actions button{width:100%;max-width:672px;display:block;margin:auto}
+.hidden{display:none!important}.score{display:flex;justify-content:space-between;align-items:center}.num{font-size:35px;font-weight:900}.bar{height:7px;background:#eaecf0;border-radius:8px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:#111827;border-radius:8px}.row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #f2f4f7;font-size:12px}.row:last-child{border:0}
+.k{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f2f4f7;font-size:12px}.k:last-child{border:0}.status{font-size:9px;font-weight:900;padding:5px 7px;border-radius:99px;white-space:nowrap}.use{background:#ecfdf3;color:var(--g)}.verify{background:#fffaeb;color:var(--w)}.reject{background:#fef3f2;color:var(--r)}
+.copyhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.mini{font-size:10px;padding:7px 9px;background:#f2f4f7}.copy{font-size:13px;line-height:1.55;white-space:pre-wrap;background:#fafafa;border:1px solid var(--l);border-radius:12px;padding:11px}.notice{font-size:11px;line-height:1.5;background:#f8f9fc;border-radius:11px;padding:10px;color:#475467}.loader{text-align:center;padding:24px;color:var(--m)}.spin{width:25px;height:25px;border:3px solid #e4e7ec;border-top-color:#111827;border-radius:50%;margin:0 auto 9px;animation:s .75s linear infinite}@keyframes s{to{transform:rotate(360deg)}}.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:9px 12px;border-radius:10px;font-size:11px;opacity:0;z-index:30}.toast.show{opacity:1}.error{background:#fef3f2;color:#b42318}
+</style></head>
+<body>
+<div class="app">
+<header><div><div class="brand">Listing Intelligence</div><div class="sub">Private • Meesho-first • Real AI connector</div></div><span class="badge">V4</span></header>
+<div class="steps"><i id="st1" class="on"></i><i id="st2"></i><i id="st3"></i></div>
+
+<section id="form">
+<div class="card"><h2>Listing history</h2><p class="hint">Your test listings are saved locally in this browser only. Nothing is uploaded by this history feature.</p>
+<div id="historyBox" class="notice">No saved listings yet.</div>
+</div>
+<div class="card"><h2>Product images</h2><p class="hint">Upload clear product angles. Images are sent only to your configured server-side AI endpoint.</p>
+<div class="upload"><label for="images">＋ Add images</label><input id="images" type="file" accept="image/*" multiple><div id="preview" class="preview"></div></div></div>
+
+<div class="card"><h2>Verified product data</h2><p class="hint">Only enter facts you have personally tested or verified. Missing facts stay missing.</p>
+<label>Product name *</label><input id="name" placeholder="e.g. Silicone Body Scrubber">
+<div class="grid">
+<div><label>Product type</label><input id="type" placeholder="Body Scrubber"></div><div><label>Material</label><input id="material" placeholder="Silicone"></div>
+<div><label>Color</label><input id="color" placeholder="Pink"></div><div><label>Pack quantity</label><input id="pack" placeholder="1"></div>
+<div><label>Size / dimensions</label><input id="size" placeholder="28 cm"></div><div><label>Usage</label><input id="usage" placeholder="Body / Bath"></div>
+</div><label>Other verified details</label><textarea id="details" placeholder="Only facts you have tested or verified..."></textarea></div>
+
+<div class="card"><h2>Marketplace suggested keywords</h2><p class="hint">Paste marketplace high-search/suggested queries. The AI will evaluate relevance instead of stuffing them.</p>
+<textarea id="keywords" placeholder="silicone body scrubber&#10;silicone bath scrubber&#10;body scrubber brush"></textarea></div>
+
+<div class="card"><h2>5. Performance feedback (optional)</h2>
+<p class="hint">Paste actual marketplace metrics when available. The system will use them as feedback, not as proof of the marketplace algorithm.</p>
+<div class="grid">
+<div><label>Impressions / views</label><input id="impressions" type="number" min="0" placeholder="e.g. 12500"></div>
+<div><label>Clicks / product visits</label><input id="clicks" type="number" min="0" placeholder="e.g. 850"></div>
+<div><label>Orders</label><input id="orders" type="number" min="0" placeholder="e.g. 42"></div>
+<div><label>Returns</label><input id="returns" type="number" min="0" placeholder="e.g. 3"></div>
+</div>
+<div class="grid">
+<div><label>Current selling price</label><input id="price" type="number" min="0" placeholder="Optional"></div>
+<div><label>Ad spend</label><input id="adSpend" type="number" min="0" placeholder="Optional"></div>
+</div>
+<label>Seller notes</label><textarea id="performanceNotes" placeholder="Example: clicks are good but orders are low; product image was changed recently..."></textarea>
+</div>
+
+<div class="card"><h2>Generation settings</h2><div class="grid"><div><label>Marketplace</label><select id="market"><option>Meesho</option></select></div><div><label>Writing style</label><select id="style"><option>Natural & clear</option><option>Concise</option><option>Detailed</option></select></div></div>
+<div class="notice" style="margin-top:10px"><b>Security:</b> keep your model API key on the server. Never paste it into this page.</div></div>
+</section>
+
+<section id="result" class="hidden">
+<div id="loading" class="card loader"><div class="spin"></div><b id="loadText">Preparing AI analysis...</b><p class="hint" style="margin:6px 0 0">Image → product understanding → keyword relevance → listing.</p></div>
+<div id="error" class="card error hidden"></div>
+<div id="output" class="hidden">
+<div class="card"><div class="score"><div><h2>Listing Signal Score</h2><p class="hint" style="margin:2px 0">Optimization indicator, not a ranking guarantee.</p></div><div class="num" id="score">0</div></div><div class="bar"><i id="bar"></i></div></div>
+<div class="card"><h2>Product understanding</h2><div id="facts"></div></div>
+<div class="card"><h2>Keyword intelligence</h2><div id="keywordBox"></div></div>
+<div class="card"><h2>Keyword priority map</h2><p class="hint">Relevance is about product/search fit, not raw search volume.</p><div id="priorityBox"></div></div>
+<div class="card"><h2>Signal breakdown</h2><div id="breakdown"></div></div>
+<div class="card"><h2>Query simulation</h2><p class="hint">Diagnostic relevance test — not a real marketplace ranking prediction.</p><div id="queryBox"></div></div>
+<div class="card"><div class="copyhead"><h3>Optimized title</h3><button class="mini" onclick="copy('title')">COPY</button></div><div id="title" class="copy"></div></div>
+<div class="card"><div class="copyhead"><h3>Natural description</h3><button class="mini" onclick="copy('description')">COPY</button></div><div id="description" class="copy"></div></div>
+<div class="card"><div class="copyhead"><h3>Attributes</h3><button class="mini" onclick="copy('attributes')">COPY</button></div><div id="attributes" class="copy"></div></div>
+<div class="card"><h2>Claim Guard</h2><div id="claimBox"></div></div>
+<div class="card"><h2>Validation status</h2><div id="validationStatus" class="notice" style="margin-top:8px"></div></div><div class="card"><h2>Performance feedback</h2><div id="performanceBox"></div></div>
+<div class="card"><h2>Why not 100?</h2><div id="issues" class="notice" style="margin-top:8px"></div></div>
+<div class="card"><button class="primary" style="width:100%" onclick="copyAll()">COPY FULL LISTING</button></div>
+</div></section>
+<div class="actions"><button id="go" class="primary" onclick="runAI()">Analyze with AI</button></div>
+</div><div id="toast" class="toast">Copied</div>
+
+<script>
+const $=id=>document.getElementById(id);
+window.addEventListener('DOMContentLoaded',renderHistory);
+$('images').addEventListener('change',e=>{$('preview').innerHTML='';[...e.target.files].slice(0,8).forEach(f=>{const r=new FileReader();r.onload=x=>{const im=document.createElement('img');im.src=x.target.result;$('preview').appendChild(im)};r.readAsDataURL(f)})});
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result));r.onerror=reject;r.readAsDataURL(file)})}
+
+const HISTORY_KEY="listing_intelligence_history_v10";
+function getHistory(){try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]")}catch{return[]}}
+function renderHistory(){
+ const h=getHistory();
+ $("historyBox").innerHTML=h.length?h.slice(-5).reverse().map(x=>`<div style="padding:8px 0;border-bottom:1px solid #e4e7ec"><b>${esc(x.name)}</b><br><small>${esc(x.date)} • Score ${x.score}</small></div>`).join('')+'<button class="mini" style="margin-top:8px" onclick="clearHistory()">Clear history</button>':"No saved listings yet.";
+}
+function saveHistory(d){
+ const h=getHistory();h.push({name:d.name||$("name").value.trim(),date:new Date().toLocaleString(),score:d.signalScore??d.score??0,title:d.title||""});
+ localStorage.setItem(HISTORY_KEY,JSON.stringify(h.slice(-30)));renderHistory();
+}
+function clearHistory(){localStorage.removeItem(HISTORY_KEY);renderHistory()}
+function runClaimGuard(d){
+ const text=(String(d.title||"")+" "+String(d.description||"")+" "+JSON.stringify(d.attributes||"")).toLowerCase();
+ const verified=$("details").value.toLowerCase()+" "+$("material").value.toLowerCase()+" "+$("type").value.toLowerCase()+" "+$("usage").value.toLowerCase()+" "+$("color").value.toLowerCase();
+ const risky=[
+  ["100%","percentage claim"],
+  ["food grade","material grade"],
+  ["food-grade","material grade"],
+  ["antibacterial","performance claim"],
+  ["waterproof","water resistance claim"],
+  ["water proof","water resistance claim"],
+  ["medical grade","certification/grade claim"],
+  ["dermatologically tested","testing claim"],
+  ["lifetime","durability claim"],
+  ["5000","numeric product claim"],
+  ["chemical free","composition claim"]
+ ];
+ const found=risky.filter(([term])=>text.includes(term));
+ const unverified=found.filter(([term])=>!verified.includes(term));
+ if(!found.length)return {status:"PASS",html:'<div class="notice">No high-risk claim phrase was detected in the generated listing.</div>'};
+ if(unverified.length)return {status:"REVIEW",html:'<div class="notice error"><b>Review required.</b><br>'+unverified.map(x=>`• ${esc(x[0])} — ${esc(x[1])}`).join("<br>")+'<br><br>Verify these claims before publishing.</div>'};
+ return {status:"PASS",html:'<div class="notice">Risky claim wording was found, but matching seller-provided text exists. Still review before publishing.</div>'};
+}
+async function runAI(){
+ if(!$('name').value.trim()){alert('Product name is required.');return}
+ $('form').classList.add('hidden');$('result').classList.remove('hidden');$('go').textContent='Start New Listing';$('go').onclick=()=>location.reload();$('st1').classList.remove('on');$('st2').classList.add('on');$('error').classList.add('hidden');$('output').classList.add('hidden');$('loading').classList.remove('hidden');
+ const msgs=['Preparing AI analysis...','Analyzing product images...','Checking keyword relevance...','Generating natural listing...'];let i=0;const timer=setInterval(()=>{i++;if(i<msgs.length)$('loadText').textContent=msgs[i]},700);
+ try{
+  const files=[...$('images').files].slice(0,8);const images=[];for(const f of files)images.push({mimeType:f.type||'image/jpeg',data:await fileToDataURL(f)});
+  const payload={marketplace:$('market').value,style:$('style').value,product:{name:$('name').value.trim(),verified:{type:$('type').value.trim(),material:$('material').value.trim(),color:$('color').value.trim(),pack:$('pack').value.trim(),size:$('size').value.trim(),usage:$('usage').value.trim(),details:$('details').value.trim()}},suggestedKeywords:$('keywords').value.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean),performance:{impressions:Number($('impressions').value)||0,clicks:Number($('clicks').value)||0,orders:Number($('orders').value)||0,returns:Number($('returns').value)||0,price:Number($('price').value)||0,adSpend:Number($('adSpend').value)||0,notes:$('performanceNotes').value.trim()},images};
+  const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!res.ok)throw new Error((await res.text())||('Server error '+res.status));
+  const data=await res.json();render(data);
+ }catch(e){$('loading').classList.add('hidden');$('error').classList.remove('hidden');$('error').innerHTML='<b>AI connection failed.</b><br>'+esc(e.message)+'<br><br>Configure the server-side model connector, then try again.';$('st2').classList.remove('on');$('st1').classList.add('on')}
+ finally{clearInterval(timer)}
+}
+function group(title,a,c,l){return Array.isArray(a)&&a.length?`<div style="font-size:10px;font-weight:900;margin:10px 0 4px">${title}</div>`+a.map(x=>{let k=typeof x==='string'?x:x.keyword;return `<div class="k"><span>${esc(k)}</span><span class="status ${c}">${l}</span></div>`}).join(''):''}
+function render(d){
+ const score=Number(d.signalScore??d.score??0);$('score').textContent=score;$('bar').style.width=Math.max(0,Math.min(100,score))+'%';const cg=runClaimGuard(d);$('claimBox').innerHTML=cg.html;saveHistory(d);
+ const p=d.productUnderstanding||{};$('facts').innerHTML=[['Product Type',p.productType||p.type||'Not provided'],['Category',p.category||'Not provided'],['Primary Intent',p.primaryIntent||'Not provided'],['Material',p.material||'Not provided'],['Usage',p.usage||'Not provided']].map(x=>`<div class="row"><span>${esc(x[0])}</span><b>${esc(x[1])}</b></div>`).join('');
+ const k=d.keywordAnalysis||{};$('keywordBox').innerHTML=group('PRIMARY',k.primary,'use','USE')+group('SECONDARY',k.secondary,'use','USE')+group('LONG-TAIL',k.longTail||k.long,'use','USE')+group('CONDITIONAL / VERIFY',k.conditional,'verify','VERIFY')+group('REJECTED',k.rejected,'reject','REJECT');
+ $('title').textContent=d.title||'';$('description').textContent=d.description||'';$('attributes').textContent=typeof d.attributes==='string'?d.attributes:Object.entries(d.attributes||{}).map(([a,b])=>a+': '+b).join('\n');
+ const issues=d.issues||d.scoreBreakdown?.issues||[];
+ const ranking=Array.isArray(k.keywordRanking)?k.keywordRanking:[];
+ $('priorityBox').innerHTML=ranking.length?ranking.sort((a,b)=>(b.relevanceScore||0)-(a.relevanceScore||0)).map(x=>`<div class="k"><span><b>${esc(x.keyword)}</b><br><small>${esc(x.intent||'')}</small></span><span class="status use">${Number(x.relevanceScore||0)}/100 • ${esc((x.placement||[]).join(', ')||'NONE')}</span></div>`).join(''):'No keyword priority data returned.';
+ const sb=d.scoreBreakdown||{};
+ $('breakdown').innerHTML=[['Product accuracy',sb.productAccuracy],['Search relevance',sb.searchRelevance],['Keyword relevance',sb.keywordRelevance],['Attribute completeness',sb.attributeCompleteness],['Natural language',sb.naturalLanguage],['Data consistency',sb.dataConsistency]].map(x=>`<div class="row"><span>${esc(x[0])}</span><b>${x[1]??'—'}/100</b></div>`).join('');
+const qs=Array.isArray(d.querySimulation)?d.querySimulation:[];
+ $('queryBox').innerHTML=qs.length?qs.map(x=>`<div style="padding:10px 0;border-bottom:1px solid #f2f4f7"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:12px">${esc(x.query)}</b><span class="status ${x.matchScore>=80?'use':x.matchScore>=60?'verify':'reject'}">${Number(x.matchScore)}/100</span></div><div class="hint" style="margin:5px 0 0"><b>Matched:</b> ${esc((x.matchedSignals||[]).join(', ')||'None')}<br><b>Missing:</b> ${esc((x.missingSignals||[]).join(', ')||'None')}<br>${esc(x.recommendation||'')}</div></div>`).join(''):'No query simulation returned.';
+const vs=d.scoreBreakdown?.validationStatus||'REVIEW';$('validationStatus').textContent=vs==='PASS'?'Validation passed: no automatic contradiction was detected.':'Validation review: the system found items that should be checked before publishing.';$('issues').textContent=Array.isArray(issues)?(issues.length?issues.join(' '):'No major issues detected.') : String(issues);
+ $('loading').classList.add('hidden');$('output').classList.remove('hidden');$('st2').classList.remove('on');$('st3').classList.add('on');
+}
+function copy(id){navigator.clipboard.writeText($(id).textContent).then(()=>toast())}
+function copyAll(){navigator.clipboard.writeText('TITLE\n'+$('title').textContent+'\n\nDESCRIPTION\n'+$('description').textContent+'\n\nATTRIBUTES\n'+$('attributes').textContent).then(()=>toast())}
+function toast(){$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1000)}
+</script></body></html>
